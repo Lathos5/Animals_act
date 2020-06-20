@@ -1,0 +1,4 @@
+name    color     age    notes
+mimi    gray       8     sleeps
+bichano unknown    12    missing
+puss    orange     5     boots&hat
