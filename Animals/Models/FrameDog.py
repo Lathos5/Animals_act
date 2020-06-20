@@ -4,6 +4,10 @@ import wx.xrc
 class ventanaDog(wx.Frame):
     def __init__(self, parent):
 
+        #"""
+        #Creating the dogs frame, hat includes a form to add a dog instance
+        #"""
+
         self.mainFrame = parent
 
         wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Agregar Perro", pos = wx.DefaultPosition, size = wx.Size( 720,480 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
@@ -76,17 +80,26 @@ class ventanaDog(wx.Frame):
         self.again.Bind( wx.EVT_BUTTON, self.ReFill)
         self.return_main.Bind( wx.EVT_BUTTON, self.Continue)
 
+
     def Continue(self, event):
+        #"""
+        #Method to close the form and redirect to the main frame/window
+        #"""
         self.Close()
 
     def ReFill(self, event):
+        #"""
+        #Method to add another dog instance
+        #"""
         self.dogName.SetValue("")
         self.dogAge.SetValue("")
         self.dogColor.SetValue("")
         self.dogFriend.SetValue("")
 
     def Saving(self, event):
-
+        #"""
+        #Method to save the values of the dog instance created before
+        #"""
         dName = self.dogName.GetValue()
         dAge = self.dogAge.GetValue()
         dColor = self.dogColor.GetValue()

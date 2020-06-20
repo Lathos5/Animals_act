@@ -68,12 +68,18 @@ class AnimalsFrame(wx.Frame):
         self.Bind(wx.EVT_MENU, self.imprimir, mostrar)
 
     def form_gatos(self, cname, cage, ccolor):
+        #"""
+        #Method used to get values from the cats Form
+        #"""
         cat = Cat(name = cname,
                   color=ccolor,
                   age=cage)
         self.animals.lAnimals.append(cat)
 
     def form_perros(self, dname, dage, dcolor):
+        #"""
+        #Method used to get values from the dogs Form
+        #"""
         dog = Dog(name = dname,
                   color=dcolor,
                   friendly = '', 
@@ -82,7 +88,9 @@ class AnimalsFrame(wx.Frame):
         self.animals.lAnimals.append(dog)
 
     def abrirArchivo(self, event):
-        #""" Abre un archivo de texto plano"""
+        #"""
+        #Method used to open a file to attach an animal
+        #"""
         wc = "Text Files (*.txt)|*.txt|Excel Files (*.xslx)|*.xlsx"
         dlg=wx.FileDialog(self, "Abrir archivo de animales", wildcard=wc, style = wx.FD_OPEN)
         if dlg.ShowModal() == wx.ID_CANCEL:
@@ -90,6 +98,10 @@ class AnimalsFrame(wx.Frame):
         pathname = dlg.GetPath()
 
         nombre, extension = os.path.splitext(pathname)
+
+        #"""
+        #Accordin to the file extension, we summon the correct method for the file
+        #"""
 
         if extension == ".txt":
             #method created for txt files
@@ -158,26 +170,43 @@ class AnimalsFrame(wx.Frame):
 
     
     def alerta(self, animalito):
+        #"""
+        #Shows a message acorrding to the type of animal attached form the Open File option
+        #"""
         wx.MessageBox(animalito +' han sido agregados', 'Info', wx.OK | wx.ICON_INFORMATION)
     
     def imprimir(self, event):
-        #Imprime el contenido de la clase Animales
+        #"""
+        #Prints the animals class content
+        #"""
         self.editor.SetValue(self.animals.shownList())
 
     def llamar_Dog(self, event):
+        #"""
+        #Opens the dogs frame
+        #"""
         vDog = ventanaDog(self)
         vDog.Show()
         
         
     def llamar_Cat(self, event):
+        #"""
+        #Opens the cats frame
+        #"""
         vCat = ventanaCat(self)
         vCat.Show()
 
 
 class ListAnimals():
+    #"""
+    #Class for the animals list
+    #"""
     lAnimals = []
 
     def shownList(self):
+        #"""
+        #method used to create the output, concatenating a string by each tuple of the animals list
+        #"""
         self.lAnimals = sorted(self.lAnimals, key=lambda x: x.name)
         result = ''
         for animal in self.lAnimals:

@@ -4,6 +4,10 @@ import wx.xrc
 class ventanaCat(wx.Frame):
     def __init__(self, parent):
 
+        #"""
+        #Creating the cats frame, hat includes a form to add a cat instance
+        #"""
+
         self.mainFrame = parent
 
         wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = u"Agregar Gato", pos = wx.DefaultPosition, size = wx.Size( 720,480 ), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
@@ -77,9 +81,15 @@ class ventanaCat(wx.Frame):
         self.return_main.Bind( wx.EVT_BUTTON, self.Continue)
 
     def Continue(self, event):
+        #"""
+        #Method to close the form and redirect to the main frame/window
+        #"""
         self.Close()
 
     def ReFill(self, event):
+        #"""
+        #Method to add another cat instance
+        #"""
         self.catName.SetValue("")
         self.catAge.SetValue("")
         self.catColor.SetValue("")
@@ -87,7 +97,9 @@ class ventanaCat(wx.Frame):
         pass
 
     def Saving(self, event):
-
+        #"""
+        #Method to save the values of the cat instance created before
+        #"""
         cName = self.catName.GetValue()
         cAge = self.catAge.GetValue()
         cColor = self.catColor.GetValue()
