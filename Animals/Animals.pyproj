@@ -31,10 +31,7 @@
     <Compile Include="Models\Dogs.py">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Models\FrameCat.py">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Models\FrameDog.py">
+    <Compile Include="Models\RegAnimal.py">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Models\__init__.py">

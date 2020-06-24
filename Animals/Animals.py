@@ -9,8 +9,7 @@ from openpyxl import load_workbook
 from Models.Anim import Animal
 from Models.Cats import Cat
 from Models.Dogs import Dog
-from Models.FrameCat import ventanaCat
-from Models.FrameDog import ventanaDog
+from Models.RegAnimal import signupWindow
 
 class AnimalsFrame(wx.Frame):
     def __init__(self,parent,title):
@@ -22,64 +21,83 @@ class AnimalsFrame(wx.Frame):
 
         p=wx.Panel(self, -1)
 
-        # Sizer
+        """
+        Sizer
+        """
         sz=wx.BoxSizer(wx.VERTICAL)
 
-        # Editor
+        """
+        Editor
+        """
         self.editor=wx.TextCtrl(p, -1, "", style=wx.TE_MULTILINE)
 
-        # Agregar al sizer
+        """
+        Adding to the sizer
+        """
         sz.Add(self.editor, 1, wx.EXPAND)
         p.SetSizer(sz)
 
-        # Crear barra de menu
+        """
+        Creates menubar
+        """
         self.crearMenu()
         self.Center(True)
         self.Show()
 
 
-    def crearMenu(self):  
-        """ Crea la barra de menú """
-        marchivo=wx.Menu()
-        aFiles=marchivo.Append(-1, "Abrir Archivo")
+
+    def crearMenu(self):
+        """
+        def crearMenu(self):
+
+        Crea la barra de menú 
+        """
+        mFile=wx.Menu()
+        oFiles=mFile.Append(-1, "Open File")
         
 
-        magregar=wx.Menu()
-        aDog=magregar.Append(-1, "Agregar Perro ")
-        aCat=magregar.Append(-1, "Agregar Gato ")
+        mAdd=wx.Menu()
+        aAnimal=mAdd.Append(-1, "Add New Animal ")
 
-        mImprimir = wx.Menu()
-        mostrar = mImprimir.Append(-1, "Mostrar arreglo")
+        mPrint = wx.Menu()
+        showAnimals = mPrint.Append(-1, "Show Animals")
 
-        barraMenu=wx.MenuBar()
-        barraMenu.Append(marchivo, "Archivo")
-        barraMenu.Append(magregar, "Agregar")
-        barraMenu.Append(mImprimir, "Mostrar arreglo")
+        menuBar=wx.MenuBar()
+        menuBar.Append(mFile, "File")
+        menuBar.Append(mAdd, "Edit")
+        menuBar.Append(mPrint, "Print Registers")
 
-        self.SetMenuBar(barraMenu)
+        self.SetMenuBar(menuBar)
 
-        # Definición de "eventos"
-        self.Bind(wx.EVT_MENU, self.abrirArchivo, aFiles)
+        """
+        Naming the "events"
+        """
+        self.Bind(wx.EVT_MENU, self.openFile, oFiles)
         
+        self.Bind(wx.EVT_MENU, self.createAnimal, aAnimal)
 
-        self.Bind(wx.EVT_MENU, self.llamar_Dog, aDog)
-        self.Bind(wx.EVT_MENU, self.llamar_Cat, aCat)
+        self.Bind(wx.EVT_MENU, self.printing, showAnimals)
 
-        self.Bind(wx.EVT_MENU, self.imprimir, mostrar)
+ 
 
-    def form_gatos(self, cname, cage, ccolor):
-        #"""
-        #Method used to get values from the cats Form
-        #"""
+    def form_cats(self, cname, cage, ccolor):
+        """
+        def form_cats(self, cname, cage, ccolor):
+
+        Method used to get values from the cats Form
+        """
         cat = Cat(name = cname,
                   color=ccolor,
                   age=cage)
         self.animals.lAnimals.append(cat)
 
-    def form_perros(self, dname, dage, dcolor):
-        #"""
-        #Method used to get values from the dogs Form
-        #"""
+
+    def form_dogs(self, dname, dage, dcolor):
+        """
+        def form_dogs(self, dname, dage, dcolor):
+
+        Method used to get values from the dogs Form
+        """
         dog = Dog(name = dname,
                   color=dcolor,
                   friendly = '', 
@@ -87,131 +105,156 @@ class AnimalsFrame(wx.Frame):
                   age=dage)
         self.animals.lAnimals.append(dog)
 
-    def abrirArchivo(self, event):
-        #"""
-        #Method used to open a file to attach an animal
-        #"""
+
+    def openFile(self, event):
+        """
+        def openFile(self, event):
+
+        Method used to open a file to attach an animal
+        """
         wc = "Text Files (*.txt)|*.txt|Excel Files (*.xslx)|*.xlsx"
-        dlg=wx.FileDialog(self, "Abrir archivo de animales", wildcard=wc, style = wx.FD_OPEN)
+        dlg=wx.FileDialog(self, "Open Animals File", wildcard=wc, style = wx.FD_OPEN)
         if dlg.ShowModal() == wx.ID_CANCEL:
             return
         pathname = dlg.GetPath()
 
-        nombre, extension = os.path.splitext(pathname)
+        filename, extension = os.path.splitext(pathname)
 
-        #"""
-        #Accordin to the file extension, we summon the correct method for the file
-        #"""
+        """
+        According to the file extension, we call the appropiate method for the file
+        """
 
         if extension == ".txt":
-            #method created for txt files
+            """
+            method created for txt files
+            """
             self.txtFile(pathname, dlg)
             
         elif extension == ".xlsx":
-            #method created for excel files
+            """
+            method created for excel files
+            """
             self.xslxFile(pathname, dlg)
+
         
     def xslxFile(self, pathname, dialog):
         try:
-            #¨¨¨
-            #Dogs
-            #¨¨¨
+            """
+            def xslxFile(self, pathname, dialog):
+
+            Opens a excel file format
+
+            Dogs
+            """
             workbook = load_workbook(filename = pathname)
             sheet = workbook.active
 
            
             for row in sheet.iter_rows(min_row = 2, values_only = True):
-                #¨¨¨
-                #for each row on the excel dogs file, we will create a dog object whom is going to be added to the animals list
-                #¨¨¨
+                """
+                for each row on the excel dogs file, we will create a dog object whom is going to be added to the animals list
+                """
                 dog = Dog(name=row[0],
                          color=row[1],
                          friendly=row[2],
                          hasOwner=row[3],
                          age=row[4])
                 self.animals.lAnimals.append(dog)
-            self.alerta("Perros")
+            self.alert("Dogs")
         except IOError:
-             wx.LogError(u"No puede abrir archivo '%s'." % newfile)
+             wx.LogError(u"The file is unavailable '%s'." % newfile)
              dialog.Destroy()
+  
     
     
     def txtFile(self, pathname, dialog):
         try:
-            with open(pathname) as Gatos: 
-                    #¨¨¨
-                    #Cats
-                    #¨¨¨
-                
+            with open(pathname) as Gatos:
+                """
+                def txtFile(self, pathname, dialog):
+
+                Opens a txt file format
+
+                Cats
+                """
                 for gato in Gatos.readlines():
-  
-                      #removing multiple spaces
-  
-                      while '  ' in gato:
-                         gato = gato.replace('\n', '')
-                         gato = gato.replace('  ',' ')
-                         arrayInfo = gato.split(' ')
+                    """                   
+                    Removing multiple spaces
+                    """      
+                    while '  ' in gato:
+                        gato = gato.replace('\n', '')
+                        gato = gato.replace('  ',' ')
+                        arrayInfo = gato.split(' ')
 
-                      #¨¨¨
-                      #excluding the header from the cats file to store on the animals list
-                      #¨¨¨
+                        """
+                        excluding the header from the cats file to store on the animals list
+                        """
 
-                      if arrayInfo[0] != 'name':
-                          cat = Cat(name = arrayInfo[0],
-                                    color=arrayInfo[1],
-                                    age=arrayInfo[2])
-            
-                          self.animals.lAnimals.append(cat)
+                    if arrayInfo[0] != 'name':
+                        cat = Cat(name = arrayInfo[0],
+                                  color=arrayInfo[1],
+                                  age=arrayInfo[2])
+                        self.animals.lAnimals.append(cat)
             Gatos.close()
-            self.alerta("Gatos")
+            self.alert("Cats")
         except IOError:
-            wx.LogError(u"No puede abrir archivo '%s'." % newfile)
+            wx.LogError(u"The file is unavailable '%s'." % newfile)
             dialog.Destroy()
+  
+    
+    def alert(self, pet):
+        """
+        def alert(self, pet):
 
+        Shows a message acorrding to the type of animal attached form the Open File option
+        """
+        wx.MessageBox(pet +' have been added', 'Info', wx.OK | wx.ICON_INFORMATION)
     
-    def alerta(self, animalito):
-        #"""
-        #Shows a message acorrding to the type of animal attached form the Open File option
-        #"""
-        wx.MessageBox(animalito +' han sido agregados', 'Info', wx.OK | wx.ICON_INFORMATION)
-    
-    def imprimir(self, event):
-        #"""
-        #Prints the animals class content
-        #"""
+    def printing(self, event):
+        """
+        def printing(self, event):
+
+        Method used to shhow the animals list
+        """
         self.editor.SetValue(self.animals.shownList())
 
-    def llamar_Dog(self, event):
-        #"""
-        #Opens the dogs frame
-        #"""
-        vDog = ventanaDog(self)
-        vDog.Show()
-        
-        
-    def llamar_Cat(self, event):
-        #"""
-        #Opens the cats frame
-        #"""
-        vCat = ventanaCat(self)
-        vCat.Show()
+    def createAnimal(self, event):
+        """
+        def createAnimal(self, event):
+
+        Opens the dogs frame
+        """
+        secondWindow = signupWindow(self)
+        secondWindow.Show()
+
 
 
 class ListAnimals():
-    #"""
-    #Class for the animals list
-    #"""
+    """
+    Class for the animals list
+    """
     lAnimals = []
 
     def shownList(self):
-        #"""
-        #method used to create the output, concatenating a string by each tuple of the animals list
-        #"""
+        """
+        method used to create the output, concatenating a string by each tuple of the animals list
+        """
         self.lAnimals = sorted(self.lAnimals, key=lambda x: x.name)
         result = ''
         for animal in self.lAnimals:
             result += str (animal) + "\n"
         return result
+
+#"""
+#Documentation of the entire proyect, including classes and methods
+#"""
+
+help(AnimalsFrame)
+help(ListAnimals)
+help(Dog)
+help(Cat)
+help(Animal)
+help(signupWindow)
 
 if __name__=='__main__':
     app = wx.App()
